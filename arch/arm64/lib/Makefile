@@ -23,6 +23,13 @@ CFLAGS_atomic_ll_sc.o	:= -ffixed-x1 -ffixed-x2        		\
 		   -fcall-saved-x10 -fcall-saved-x11 -fcall-saved-x12	\
 		   -fcall-saved-x13 -fcall-saved-x14 -fcall-saved-x15	\
 		   -fcall-saved-x18 -fomit-frame-pointer
+		   
+ifeq ($(CONFIG_KERNEL_MODE_NEON), y)
+obj-$(CONFIG_XOR_BLOCKS)	+= xor-neon.o
+CFLAGS_REMOVE_xor-neon.o	+= -mgeneral-regs-only
+CFLAGS_xor-neon.o		+= -ffreestanding
+endif		   
+		   
 CFLAGS_REMOVE_atomic_ll_sc.o := -pg
 GCOV_PROFILE_atomic_ll_sc.o	:= n
 KASAN_SANITIZE_atomic_ll_sc.o	:= n
