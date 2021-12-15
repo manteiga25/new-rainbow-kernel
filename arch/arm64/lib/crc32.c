@@ -64,7 +64,7 @@ CPU_BE(	rev		x5, x5		)
 CPU_BE(	rev		x6, x6		)
 	crc32\c\()x	w0, w0, x3
 	crc32\c\()x	w0, w0, x4
-        crc32\c\()x	w0, w0, x5
+	crc32\c\()x	w0, w0, x5
 	crc32\c\()x	w0, w0, x6
 	cbnz		x2, 32b
 0:	ret
@@ -89,10 +89,16 @@ CPU_BE(	rev16		w3, w3		)
 
 	.align		5
 ENTRY(crc32_le)
+alternative_if_not ARM64_HAS_CRC32
+	b		crc32_le_base
+alternative_else_nop_endif
 	__crc32
 ENDPROC(crc32_le)
 
 	.align		5
 ENTRY(__crc32c_le)
+alternative_if_not ARM64_HAS_CRC32
+	b		__crc32c_le_base
+alternative_else_nop_endif
 	__crc32		c
 ENDPROC(__crc32c_le)
